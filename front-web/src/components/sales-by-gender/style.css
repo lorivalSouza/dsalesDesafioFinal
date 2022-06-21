@@ -1,0 +1,39 @@
+.sales-by-gender-container{
+  height: 700px;
+  padding: 25px 15px 50px 30px;
+}
+
+
+
+.sales-by-gender-data{
+  height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sales-by-gender-quantity-container{
+  width: 50%;
+}
+
+.sales-by-gender-chart{
+  height: 450px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.sales-by-gender-quantity {
+  font-size: 36px;
+  color: var(--blue-color);
+}
+
+.sales-by-gender-quantity-layer {
+  display: block;
+  font-size: 18px;
+  color: var(--grey-color);
+  margin-bottom: 10px;
+
+}

@@ -1,0 +1,9 @@
+.pie-chart-card {
+  padding-top: 50px;
+}
+
+.apexcharts-legend.apexcharts-align-center{
+  flex-direction: column;
+  align-items: center;
+
+}
