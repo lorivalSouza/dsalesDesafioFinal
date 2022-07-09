@@ -1,52 +1,46 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Select from 'react-select';
-import { FilterStore, Store } from '../../types';
-import { buildFilterParams, makeRequest } from '../utils/request';
+import { Store } from '../../types';
+import { makeRequest } from '../utils/request';
 import './style.css';
 
+//export type FilterData = {
+//  story: Store | null;
+//};
+
 type Props = {
-  onFilterChange: (filter: FilterStore) => void;
+  onFilterChange: (filter: number) => void;
 };
 function Filter({ onFilterChange }: Props) {
-  const [filterStore, setFilterStore] = useState<FilterStore>();
-  const [selectStores, setSelectStores] = useState<Store[]>([]);
   const [store, setStore] = useState<Store>();
-  const params = useMemo(() => buildFilterParams(filterStore), [filterStore]);
+  const [storeList, setStoreList] = useState<Store[]>();
 
   const onChangeStore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedStore = event.target.value;
-
-    console.log(selectedStore);
-    //setStore(selectedStore);
-    //onFilterChange({ store: selectStores });
+    //setStore();
+    onFilterChange(selectedStore as unknown as number);
+    console.log('selectedStore :' + selectedStore);
   };
 
   useEffect(() => {
-    makeRequest.get('/stores').then((response) => {
+    makeRequest.get<Store[]>('/stores').then((response) => {
       console.log('terter' + response.data);
-      setSelectStores(response.data);
+      setStoreList(response.data);
     });
   }, []);
-
-  useEffect(() => {
-    makeRequest.get('/sales-by-gender').then((response) => {
-      console.log('terter' + response.data);
-      setSelectStores(response.data);
-    });
-  }, [params]);
 
   return (
     <>
       <div className="base-card filter-container">
-        <Select
-          //value={store}
-          //onChange={onChangeStore}
-          options={selectStores}
-          classNamePrefix="filter-select"
-          getOptionLabel={(store: Store) => store.name}
-          getOptionValue={(store: Store) => String(store.id)}
-          isClearable
-        />
+        <select className="filter-input" value={store?.id} onChange={onChangeStore}>
+          <option value="0">Selecione um cidade</option>
+          {storeList?.map((store) => {
+            return (
+              <option key={store.id} value={store.id}>
+                {store.name}
+              </option>
+            );
+          })}
+        </select>
       </div>
     </>
   );

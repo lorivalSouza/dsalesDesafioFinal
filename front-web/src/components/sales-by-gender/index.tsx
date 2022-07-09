@@ -1,31 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { buildSalesByGenderChart } from '../../helpers';
-import { PieChartConfig, SalesByGender } from '../../types';
+import { FilterStore, PieChartConfig, SalesByGenderType, Store } from '../../types';
 import PieChartCard from '../pie-chart-card';
 import { sumSalesByGender } from '../pie-chart-card/helpers';
 import { formatPrice } from '../utils/formatters';
-import { makeRequest } from '../utils/request';
+import { buildFilterParams, makeRequest } from '../utils/request';
 import './style.css';
 
-function SalesByDGender() {
+//export type FilterData = {
+//story: Store | null;
+//};
+
+function SalesByGender() {
+  const [filterStore, setFilterStore] = useState<FilterStore>();
+  const onChangeStore = (filter: FilterStore) => {
+    setFilterStore(filter);
+    console.log(filter);
+  };
   const [salesByGender, setSalesByGender] = useState<PieChartConfig>();
   const [totaSum, SetSumTotal] = useState(0);
+  const params = useMemo(() => buildFilterParams(filterStore), [filterStore]);
 
   useEffect(() => {
-    makeRequest.get<SalesByGender[]>('/sales/by-gender?storeId=0').then((response) => {
+    makeRequest.get<SalesByGenderType[]>('/sales/by-gender?storeId=0').then((response) => {
       console.log(response.data);
       const newTotalSum = sumSalesByGender(response.data);
       SetSumTotal(newTotalSum);
     });
   }, []);
-
+  /*
   useEffect(() => {
-    makeRequest.get<SalesByGender[]>('/sales/by-gender?storeId=0').then((response) => {
+    makeRequest.get<SalesByGenderType[]>('/sales/by-gender?storeId=0').then((response) => {
       console.log(response);
       const newSalesByGender = buildSalesByGenderChart(response.data);
       setSalesByGender(newSalesByGender);
     });
   }, []);
+*/
+  useEffect(() => {
+    makeRequest
+      .get<SalesByGenderType[]>('/sales/by-gender?storeId=', { params })
+      .then((response) => {
+        const newSalesByGender = buildSalesByGenderChart(response.data);
+        setSalesByGender(newSalesByGender);
+      })
+      .catch(() => {
+        console.error('Error to fetch sales by date');
+      });
+  }, [params]);
 
   return (
     <div className="base-card sales-by-gender-container">
@@ -46,4 +68,4 @@ function SalesByDGender() {
   );
 }
 
-export default SalesByDGender;
+export default SalesByGender;
