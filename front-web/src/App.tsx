@@ -4,12 +4,11 @@ import Filter from './components/filter';
 import Header from './components/header';
 import SalesByGender from './components/sales-by-gender';
 import { useState } from 'react';
-import { FilterStore } from './types';
 
 function App() {
-  const [filterStore, setFilterStore] = useState<FilterStore>();
+  const [filterStore, setFilterStore] = useState<number>(0);
   const onFilterChange = (filter: number) => {
-    //setFilterStore(filter);
+    setFilterStore(filter);
     console.log('filter filter' + filter);
   };
   return (
@@ -18,7 +17,7 @@ function App() {
         <Header />
         <div className="app-container">
           <Filter onFilterChange={onFilterChange} />
-          <SalesByGender />
+          <SalesByGender filterStore={filterStore} />
         </div>
       </div>
     </>

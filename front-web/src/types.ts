@@ -5,6 +5,11 @@ export type SalesByGenderType = {
   sum: number;
 };
 
+export type SalesByGender2 = {
+  gender: string;
+  sum: number;
+};
+
 export type Store = {
   id: number;
   name: string;

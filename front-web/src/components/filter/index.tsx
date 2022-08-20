@@ -1,11 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Store } from '../../types';
 import { makeRequest } from '../utils/request';
 import './style.css';
-
-//export type FilterData = {
-//  story: Store | null;
-//};
 
 type Props = {
   onFilterChange: (filter: number) => void;
